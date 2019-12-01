@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+// import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(){
+    super();
+
+    this.state = {
+      albums: []
+    }
+  }
+
+  componentDidMount() {
+    axios.get('http://localhost:3333/albums').then( res => this.setState({albums: res.data}) );
+  }
+
+  render(){
+    return (
+      <div className="section">
+        <div className="columns">
+          <div className="column">
+            { this.state.albums.map(album => {
+              return (
+                <div className="media box">
+                  <div className="media-left">{album.id}</div>
+                  <div className="media-content">{album.name}</div>
+                  <div className="media-right">
+                    <button>Detalhes</button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
